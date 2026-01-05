@@ -1,0 +1,17 @@
+torch>=1.13.0
+torchvision
+transformers>=4.25.1
+diffusers>=0.11.1
+accelerate
+scikit-learn
+numpy
+scipy
+ftfy
+tqdm
+pyyaml
+matplotlib
+h5py
+regex
+Pillow
+pandas
+huggingface_hub

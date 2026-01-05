@@ -1,0 +1,41 @@
+project:
+  name: "NH-LDM"
+  description: "Neuro-Hybrid Latent Diffusion Model for fMRI decoding"
+  seed: 42
+
+data:
+  nsd_path: "./data/nsd"  # Path to NSD dataset root
+  subjects: ["subj01"]    # List of subjects to process
+  rois:
+    evc: ["V1", "V2", "V3"]
+    hvc: ["V4", "LOC", "FFA", "PPA"]
+  normalization: "zscore" # 'zscore' or 'minmax'
+  batch_size: 1
+  num_workers: 0
+  train_trials: 100
+  test_trials: 20
+  val_trials: 20       # Subset of training for validation if needed
+
+models:
+  ridge:
+    alphas: [1e-2, 1, 100]
+    n_voxels_semantic: 1000  # Feature selection for semantic stream
+  
+  semantic:
+    output_dim: 768       # CLIP embedding dimension
+    seq_len: 77           # CLIP text sequence length (flattened: 77*768)
+  
+  structural:
+    output_dim: 16384     # 64*64*4 flattened VAE latent
+    latent_shape: [4, 64, 64]
+
+diffusion:
+  model_id: "CompVis/stable-diffusion-v1-4"
+  num_inference_steps: 10
+  guidance_scale: 7.5
+  strength: 0.75          # Noise strength for img2img (0.0 to 1.0)
+  device: "cpu"
+
+evaluation:
+  metrics: ["n_way_accuracy", "clip_similarity", "ssim"]
+  n_way_top_k: 1
